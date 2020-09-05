@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 public class ZoomEffect : MonoBehaviour
 {
     Volume zoomEffect;
+
     float velocity;
 
     private void Awake()
