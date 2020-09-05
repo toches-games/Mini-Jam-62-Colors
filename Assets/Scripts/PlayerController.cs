@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     float lastMovement = 1f;
 
-    BoxCollider2D boxCollider;
+    CapsuleCollider2D boxCollider;
 
     Vector2 velocity;
 
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<CapsuleCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
         //sfx = FindObjectOfType<SFXManager>();
     }
@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxisRaw(HORIZONTAL) >= 0 || Input.GetAxisRaw(HORIZONTAL) <= 0)
         {
             isWalking = true;
-            lastMovement = Input.GetAxis(HORIZONTAL) * runningSpeed;
+            lastMovement = Input.GetAxisRaw(HORIZONTAL) * runningSpeed;
         }
 
         if (!isWalking)
