@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Tilemaps;
 
 public class ZoomEffect : MonoBehaviour
 {
+    public float zoomInitTime = 0.5f;
+    public float zoomSmoothTime = 0.25f;
+
     Volume zoomEffect;
 
     float velocity;
+
+    [HideInInspector]
+    public float smoothValue;
 
     private void Awake()
     {
@@ -17,14 +24,35 @@ public class ZoomEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager.sharedInstance.tempTime <= 0.5f)
+        /* //Por ahora
+        if (LevelManager.sharedInstance.currentState == LevelState.Happy)
         {
-            zoomEffect.weight = Mathf.SmoothDamp(zoomEffect.weight, 1f, ref velocity, 0.25f);
+            LevelManager.sharedInstance.happyTiles.GetComponent<TilemapRenderer>().material.SetFloat("Fade", 1 - smoothValue);
+            LevelManager.sharedInstance.sadTiles.GetComponent<TilemapRenderer>().material.SetFloat("Fade", smoothValue);
         }
 
         else
         {
-            zoomEffect.weight = Mathf.SmoothDamp(zoomEffect.weight, 0f, ref velocity, 0.25f);
+            LevelManager.sharedInstance.happyTiles.GetComponent<TilemapRenderer>().material.SetFloat("Fade", smoothValue);
+            LevelManager.sharedInstance.sadTiles.GetComponent<TilemapRenderer>().material.SetFloat("Fade", 1 - smoothValue);
         }
+        //--- */
+
+        if (LevelManager.sharedInstance.tempTime <= zoomInitTime)
+        {
+            smoothValue = Mathf.SmoothDamp(smoothValue, 1f, ref velocity, zoomSmoothTime);
+        }
+
+        else if (LevelManager.sharedInstance.tempTime >= LevelManager.sharedInstance.nextStateTime - zoomInitTime)
+        {
+            smoothValue = Mathf.SmoothDamp(smoothValue, 0f, ref velocity, zoomSmoothTime);
+        }
+
+        else
+        {
+            //smoothValue = 0;
+        }
+        
+        zoomEffect.weight = smoothValue;
     }
 }

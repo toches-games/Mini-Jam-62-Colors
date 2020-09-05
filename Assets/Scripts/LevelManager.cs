@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+//Estados del nivel
 public enum LevelState
 {
     Happy,
@@ -73,11 +74,12 @@ public class LevelManager : MonoBehaviour
 
         if(tempTime <= 0)
         {
-            tempTime = nextStateTime;
             UpdateNextStateTiles();
+            tempTime = nextStateTime;
         }
     }
 
+    //Desactiva los tiles
     void DisableTiles(Tilemap tileRender, TilemapCollider2D tileCollider)
     {
         Color tempActiveColor = tileRender.color;
@@ -85,6 +87,7 @@ public class LevelManager : MonoBehaviour
         tileCollider.enabled = false;
     }
 
+    //Activa los tiles
     void ActiveTiles(Tilemap tileRender, TilemapCollider2D tileCollider)
     {
         Color tempActiveColor = tileRender.color;
