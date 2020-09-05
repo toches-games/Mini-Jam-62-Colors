@@ -34,7 +34,8 @@ public class LevelManager : MonoBehaviour
     public LevelState currentState = LevelState.Happy;
 
     //Solo es para mostrar el tiempo en pantalla
-    int tempTime;
+    [HideInInspector]
+    public float tempTime;
 
     private void Awake()
     {
@@ -58,24 +59,22 @@ public class LevelManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    IEnumerator Start()
+    void Start()
     {
         tempTime = nextStateTime;
 
         //Crea el nivel inicial con un estado aleatorio
         UpdateRandomTilesLevel();
+    }
 
-        while (true)
+    void Update()
+    {
+        tempTime -= Time.deltaTime;
+
+        if(tempTime <= 0)
         {
-            //Cada tiempo se actualiza al siguiente estado
-            yield return new WaitForSeconds(1);
-            tempTime--;
-
-            if(tempTime <= 0)
-            {
-                tempTime = nextStateTime;
-                UpdateNextStateTiles();
-            }
+            tempTime = nextStateTime;
+            UpdateNextStateTiles();
         }
     }
 
