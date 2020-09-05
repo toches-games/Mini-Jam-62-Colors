@@ -21,12 +21,12 @@ public class LevelManager : MonoBehaviour
     [Header("Tile Gameobjects")]
     //Guarda los tiles del nivel en estado feliz
     public GameObject happyTiles;
-    TilemapRenderer happyTilesRenderer;
+    Tilemap happyTileMap;
     TilemapCollider2D happyTilesCollider;
 
     //Guarda los tiles del nivel en estado triste
     public GameObject sadTiles;
-    TilemapRenderer sadTilesRenderer;
+    Tilemap sadTileMap;
     TilemapCollider2D sadTilesCollider;
 
     //Estado actual del nivel
@@ -51,10 +51,10 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        happyTilesRenderer = happyTiles.GetComponent<TilemapRenderer>();
+        happyTileMap = happyTiles.GetComponent<Tilemap>();
         happyTilesCollider = happyTiles.GetComponent<TilemapCollider2D>();
 
-        sadTilesRenderer = sadTiles.GetComponent<TilemapRenderer>();
+        sadTileMap = sadTiles.GetComponent<Tilemap>();
         sadTilesCollider = sadTiles.GetComponent<TilemapCollider2D>();
     }
 
@@ -78,17 +78,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void DisableTiles(TilemapRenderer tileRender, TilemapCollider2D tileCollider)
+    void DisableTiles(Tilemap tileRender, TilemapCollider2D tileCollider)
     {
-        Color tempActiveColor = tileRender.material.color;
-        tileRender.material.color = new Color(tempActiveColor.r, tempActiveColor.g, tempActiveColor.b, 0.15f);
+        Color tempActiveColor = tileRender.color;
+        tileRender.color = new Color(tempActiveColor.r, tempActiveColor.g, tempActiveColor.b, 0.15f);
         tileCollider.enabled = false;
     }
 
-    void ActiveTiles(TilemapRenderer tileRender, TilemapCollider2D tileCollider)
+    void ActiveTiles(Tilemap tileRender, TilemapCollider2D tileCollider)
     {
-        Color tempActiveColor = tileRender.material.color;
-        tileRender.material.color = new Color(tempActiveColor.r, tempActiveColor.g, tempActiveColor.b, 1);
+        Color tempActiveColor = tileRender.color;
+        tileRender.color = new Color(tempActiveColor.r, tempActiveColor.g, tempActiveColor.b, 1);
         tileCollider.enabled = true;
     }
 
@@ -129,14 +129,14 @@ public class LevelManager : MonoBehaviour
     {
         if (currentState == LevelState.Happy)
         {
-            ActiveTiles(happyTilesRenderer, happyTilesCollider);
-            DisableTiles(sadTilesRenderer, sadTilesCollider);
+            ActiveTiles(happyTileMap, happyTilesCollider);
+            DisableTiles(sadTileMap, sadTilesCollider);
         }
 
         else
         {
-            ActiveTiles(sadTilesRenderer, sadTilesCollider);
-            DisableTiles(happyTilesRenderer, happyTilesCollider);
+            ActiveTiles(sadTileMap, sadTilesCollider);
+            DisableTiles(happyTileMap, happyTilesCollider);
         }
     }
 
