@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public enum LevelState
@@ -119,8 +120,8 @@ public class LevelManager : MonoBehaviour
         sadTiles.SetActive(true);
 
         //Asigna al estado actual un estado random, se usa al inicio para que sea aleatorio cada vez que inicia el juego
-        currentState = (LevelState)Random.Range(0, System.Enum.GetValues(typeof(LevelState)).Length);
-        
+        //currentState = (LevelState)Random.Range(0, System.Enum.GetValues(typeof(LevelState)).Length);
+        currentState = LevelState.Happy;
         //Cambia los tiles del nivel
         ChangeTiles();
     }
@@ -144,5 +145,10 @@ public class LevelManager : MonoBehaviour
     private void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 100, 20), tempTime.ToString());
+    }
+
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(0); 
     }
 }
