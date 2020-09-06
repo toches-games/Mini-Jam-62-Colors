@@ -437,9 +437,13 @@ public class PlayerController : MonoBehaviour
     {
         if (!collision.CompareTag("KillZone"))
         {
-            LevelManager.sharedInstance.tempTime = int.Parse(collision.tag);
-            LevelManager.sharedInstance.nextStateTime = int.Parse(collision.tag);
+            int changeTime = int.Parse(collision.tag);
+            LevelManager.sharedInstance.tempTime = changeTime;
+            LevelManager.sharedInstance.nextStateTime = changeTime;
             currentCheckPoint = collision.GetComponent<Transform>();
+
+            StartCoroutine(LevelManager.sharedInstance.UpdateBipolarityBar(LevelManager.sharedInstance.CalculateVariability(changeTime)));
+            
         }
         
     }

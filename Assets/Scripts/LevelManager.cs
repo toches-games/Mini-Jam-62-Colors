@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public enum LevelState
 {
@@ -38,6 +39,8 @@ public class LevelManager : MonoBehaviour
     public int tempTime;
 
     public PlayerController player;
+    public Slider slider;
+    int sliderValue;
 
     private void Awake()
     {
@@ -210,5 +213,34 @@ public class LevelManager : MonoBehaviour
     {
         player.ResumeGame();
         StartCoroutine("Start");
+    }
+
+    public IEnumerator UpdateBipolarityBar(float target)
+    {
+        for (float i = slider.value; i < target; i+=0.1f)
+        {
+            slider.value = i;
+            yield return new WaitForSeconds(0.025f);
+        }
+    }
+    public float CalculateVariability(int changeTime)
+    {
+        float target;
+        switch (changeTime)
+        {
+            case 1:
+                target = 10;
+                break;
+            case 2:
+                target = 8;
+                break;
+            case 5:
+                target = 1;
+                break;
+            default:
+                target = 1;
+                break;
+        }
+        return target;
     }
 }
