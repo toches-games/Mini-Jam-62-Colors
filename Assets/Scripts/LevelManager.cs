@@ -99,6 +99,11 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
+        if (player.GetPauseGame())
+        {
+            return;
+        }
+
         tempTime -= Time.deltaTime;
 
         if(tempTime <= 0)
@@ -262,13 +267,15 @@ public class LevelManager : MonoBehaviour
     public void PauseGame()
     {
         player.PauseGame();
-        StopCoroutine("Start");
+        //StopCoroutine("Start");
+        tempTime = nextStateTime;
     }
 
     public void ResumeGame()
     {
         player.ResumeGame();
-        StartCoroutine("Start");
+        tempTime = nextStateTime;
+        //StartCoroutine("Start");
     }
 
     public IEnumerator UpdateBipolarityBar(float target)

@@ -433,6 +433,11 @@ public class PlayerController : MonoBehaviour
         pause = false;
     }
 
+    public bool GetPauseGame()
+    {
+        return pause;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("KillZone"))
