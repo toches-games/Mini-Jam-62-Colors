@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 //using UnityEngine.Playables;
 //using UnityEngine.UI;
 
@@ -16,7 +17,6 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     
     Rigidbody2D playerRb;
-    Vector3 startPosition;
     Animator animator;
 
     bool isWalking;
@@ -30,10 +30,11 @@ public class PlayerController : MonoBehaviour
 
     float lastMovement = 1f;
 
-    CapsuleCollider2D boxCollider;
+    BoxCollider2D boxCollider;
 
     Vector2 velocity;
 
+    public Transform currentCheckPoint;
     /*
     //public AudioSource fallDown;
     const string IS_ALIVE = "isAlive";
@@ -46,17 +47,16 @@ public class PlayerController : MonoBehaviour
     const string IS_TOUCHING_GROUND = "isTouchingGround";
     */
 
-    /*
-    int healthPoints, manaPoints;
+    
+    int healthPoints;
 
-    public const int INITIAL_HEALTH = 3, INITIAL_MANA = 15,
-        MIN_HEALTH = 1, MIN_MANA = 0, MAX_HEALTH = 3, MAX_MANA = 30;
-
-    public const int SUPERJUMP_COST = 10;
-    public const float SUPERJUMP_FORCE = 2f;
+    public const int INITIAL_HEALTH = 3,
+        MIN_HEALTH = 1,  MAX_HEALTH = 3;
 
     public List<Image>lives;
-    */
+    bool pause = false;
+
+
 
     //Variables para el conseguir el swipe up y saltar
     //Vector2 startTouchPosition, endTouchPosition;
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        boxCollider = GetComponent<CapsuleCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
         //sfx = FindObjectOfType<SFXManager>();
     }
@@ -82,28 +82,48 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = this.transform.position;
-        /*
-        runningSpeed = GameManager.sharedInstance.gameSpeed;
+        currentCheckPoint = GameObject.Find("initialCheckPoint").transform;
+
+        //startPosition = this.transform.position;
+        
+        //runningSpeed = GameManager.sharedInstance.gameSpeed;
         //GameObject.Find("CM vcam3").GetComponent<CinemachineVirtualCamera>().Priority++;
         //playerRb.MoveRotation(Quaternion.Euler(0, 90, 0));
         //transform.rotation = Quaternion.Euler(0, 90, 0);
         //transform.Rotate(0, 90, 0);
         //playerRb.rotation = Quaternion.Euler(0, 90, 0);
         healthPoints = INITIAL_HEALTH;
-        */
+        
 
     }
 
     private void Update()
     {
+        if (pause)
+        {
+            return;
+        }
         if (Input.GetButtonDown("Jump"))
         {
             Jump();
         }
+
+        if(LevelManager.sharedInstance.currentState == LevelState.Happy)
+        {
+            jumpForce = 14.5f;
+        }
+        else
+        {
+            jumpForce = 12.5f;
+        }
+
     }
     void FixedUpdate()
     {
+        if (pause)
+        {
+            return;
+        }
         //Hacemos que la velocidad vaya avanzando de manera suavizada para que se vea un movimiento fluido
         Vector2 targetVelocity = new Vector2(lastMovement, playerRb.velocity.y);
         playerRb.velocity = Vector2.SmoothDamp(playerRb.velocity, targetVelocity, ref velocity, smoothMovement);
@@ -336,8 +356,10 @@ public class PlayerController : MonoBehaviour
         //GameManager.sharedInstance.GameOver();
         //sfx.paso.Stop();
         //sfx.salto.Stop();
+        Debug.Log("Muerto");
     }
 
+    /**
     void RestartPosition()
     {
         if(this.transform.position.x >= 0f)
@@ -352,11 +374,12 @@ public class PlayerController : MonoBehaviour
         //GameObject mainCamera = GameObject.Find("Main Camera");
         //mainCamera.GetComponent<CameraFollow>().ResetCameraPosition();
     }
+    **/
 
     public void CollectHealth(int points)
     {
-        /*
         this.healthPoints += points;
+
         lives[healthPoints].gameObject.SetActive(false);
 
         if (this.healthPoints > MAX_HEALTH)
@@ -369,36 +392,29 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            sfx.herida.Play();
+            Invoke("ResetToCheckPoint", 0.5f);
+            //sfx.herida.Play();
         }
-        */
+        
     }
 
-    public void CollectMana(int points)
+    private void ResetToCheckPoint()
     {
-        /*
-        this.manaPoints += points;
-        if (this.manaPoints > MAX_MANA)
-        {
-            manaPoints = MAX_MANA;
-        }
-        */
+        this.transform.position = currentCheckPoint.position;
+        this.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
     }
 
-    /*public int GetHealth()
+    public int GetHealth()
     {
         return healthPoints;
     }
 
-    public int GetMana()
-    {
-        return manaPoints;
-    }*/
-
+    /**
     public float GetTraveledDistance()
     {
         return this.transform.position.x - startPosition.x;
     }
+    **/
 
     public void StopAllSFX()
     {
@@ -407,40 +423,24 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void PauseGame()
     {
-        /*
+        pause = true;
+    }
+
+    public void ResumeGame()
+    {
+        pause = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("KillZone"))
+        {
+            LevelManager.sharedInstance.tempTime = int.Parse(collision.tag);
+            LevelManager.sharedInstance.nextStateTime = int.Parse(collision.tag);
+            currentCheckPoint = collision.GetComponent<Transform>();
+        }
         
-        if (other.CompareTag("initAnimation"))
-        {
-            //  Director.Play();
-            GameManager.sharedInstance.NextLevel(((int)GameManager.sharedInstance.currentGameState) + 1);
-            Debug.Log(((int)GameManager.sharedInstance.currentGameState) + 1);
-            playerRb.freezeRotation = false;
-            other.GetComponent<BoxCollider>().enabled = false;
-            sfx.alerta.Play();
-        }
-        if (other.CompareTag("finishAnimation"))
-        {
-            playerRb.freezeRotation = true;
-        }
-        */
     }
-    private void OnTriggerExit(Collider other)
-    {
-        /*
-        if (other.CompareTag("finishAnimation"))
-        {
-            //playableDirector.Stop();
-            other.gameObject.GetComponent<BoxCollider>().isTrigger = false;
-            //Destroy(GameObject.Find("Platforms" + ((int)GameManager.sharedInstance.currentGameState - 1)));
-        }
-        if (other.CompareTag("KillZone"))
-        {
-            Die();
-        }
-
-        */
-    }
-
 }

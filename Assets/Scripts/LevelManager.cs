@@ -35,7 +35,9 @@ public class LevelManager : MonoBehaviour
     public LevelState currentState = LevelState.Happy;
 
     //Solo es para mostrar el tiempo en pantalla
-    int tempTime;
+    public int tempTime;
+
+    public PlayerController player;
 
     private void Awake()
     {
@@ -150,5 +152,63 @@ public class LevelManager : MonoBehaviour
     public void ResetGame()
     {
         SceneManager.LoadScene(0); 
+    }
+
+    //Metodo que será llamado cuando querramos reanudar el juego luego de 
+    //una pausa (presionando el 'Resume Button')
+    public void CountDownResume(bool ready = false)
+    {
+        //Si entra por primera vez
+        if (!ready)
+        {
+            PauseGame();
+            //player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 100);
+            //Activamos el texto del temporizador
+            //userInterfaceManager.countDownResumeText.gameObject.SetActive(true);
+
+            //Iniciamos la corrutina para el temporizador
+            StartCoroutine("CountDown");
+        }
+        //Si el temporizador acabó
+        if (ready)
+        {
+            //Detenemos la corrutina del temporizador
+            StopCoroutine("CountDown");
+
+            //Desactivamos el texto del temporizador
+            //userInterfaceManager.countDownResumeText.gameObject.SetActive(false);
+            //Iniciamos el juego 
+            ResumeGame();
+            //Reactivamos el boton de pausa
+            //userInterfaceManager.pauseButton.gameObject.SetActive(true);
+        }
+    }
+
+    //Corrutina que llevará a cabo el temporizador para reanudar el juego
+    public IEnumerator CountDown()
+    {
+        //Ciclo que decrementa cada numero a mostrar
+        for (int i = 5; i >= 1; i--)
+        {
+            //Asignamos el valor del ciclo al texto del temporizador
+            //userInterfaceManager.countDownResumeText.text = i.ToString();
+            //Retornamos la corrutina durante 1 segundo
+            yield return new WaitForSeconds(1f);
+        }
+        //Volvemos a llamar al metodo de reanudar partida con el parametro
+        //que permite llevar a cabo esto
+        CountDownResume(true);
+    }
+
+    public void PauseGame()
+    {
+        player.PauseGame();
+        StopCoroutine("Start");
+    }
+
+    public void ResumeGame()
+    {
+        player.ResumeGame();
+        StartCoroutine("Start");
     }
 }
