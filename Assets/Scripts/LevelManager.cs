@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using TMPro;
 
 public enum LevelState
 {
@@ -40,7 +42,7 @@ public class LevelManager : MonoBehaviour
 
     public PlayerController player;
     public Slider slider;
-    int sliderValue;
+    public GameObject freezingTime;
 
     private void Awake()
     {
@@ -167,7 +169,7 @@ public class LevelManager : MonoBehaviour
             PauseGame();
             //player.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 100);
             //Activamos el texto del temporizador
-            //userInterfaceManager.countDownResumeText.gameObject.SetActive(true);
+            freezingTime.SetActive(true);
 
             //Iniciamos la corrutina para el temporizador
             StartCoroutine("CountDown");
@@ -179,7 +181,7 @@ public class LevelManager : MonoBehaviour
             StopCoroutine("CountDown");
 
             //Desactivamos el texto del temporizador
-            //userInterfaceManager.countDownResumeText.gameObject.SetActive(false);
+            freezingTime.SetActive(false);
             //Iniciamos el juego 
             ResumeGame();
             //Reactivamos el boton de pausa
@@ -194,7 +196,7 @@ public class LevelManager : MonoBehaviour
         for (int i = 5; i >= 1; i--)
         {
             //Asignamos el valor del ciclo al texto del temporizador
-            //userInterfaceManager.countDownResumeText.text = i.ToString();
+            freezingTime.GetComponentInChildren<TextMeshProUGUI>().text = i.ToString();
             //Retornamos la corrutina durante 1 segundo
             yield return new WaitForSeconds(1f);
         }
@@ -242,5 +244,11 @@ public class LevelManager : MonoBehaviour
                 break;
         }
         return target;
+    }
+
+    public void FinishGame()
+    {
+        PauseGame();
+        GameObject.Find("FinishTimeLine").GetComponent<PlayableDirector>().Play();
     }
 }

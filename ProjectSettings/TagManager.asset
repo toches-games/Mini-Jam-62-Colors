@@ -11,6 +11,7 @@ TagManager:
   - 5
   - wait
   - KillZone
+  - FinishAnimation
   layers:
   - Default
   - TransparentFX

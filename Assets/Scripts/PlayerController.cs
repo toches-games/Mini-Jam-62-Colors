@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 //using UnityEngine.Playables;
@@ -35,7 +34,7 @@ public class PlayerController : MonoBehaviour
     Vector2 velocity;
 
     public Transform currentCheckPoint;
-    /*
+    
     //public AudioSource fallDown;
     const string IS_ALIVE = "isAlive";
     const string IS_ON_THE_GROUND = "isOnTheGround";
@@ -45,7 +44,7 @@ public class PlayerController : MonoBehaviour
     const string LAST_HORIZONTAL = "LastHorizontal";
     const string WALKING_STATE = "Walking";
     const string IS_TOUCHING_GROUND = "isTouchingGround";
-    */
+    
 
     
     int healthPoints;
@@ -67,8 +66,9 @@ public class PlayerController : MonoBehaviour
     /*
     //GameState currentState;
     SpriteRenderer sprite;
-    //SFXManager sfx;
     */
+    SFXManager sfx;
+    
 
     private void Awake()
     {
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
-        //sfx = FindObjectOfType<SFXManager>();
+        sfx = FindObjectOfType<SFXManager>();
     }
 
     // Start is called before the first frame update
@@ -239,10 +239,10 @@ public class PlayerController : MonoBehaviour
 
             if (isWalking)
             {
-                /*if (!sfx.paso.isPlaying)
-                {
-                    sfx.paso.Play();
-                }*/
+                //if (!sfx.paso.isPlaying)
+                //{
+                //    sfx.paso.Play();
+                //}
             }
         }
 
@@ -356,7 +356,6 @@ public class PlayerController : MonoBehaviour
         //GameManager.sharedInstance.GameOver();
         //sfx.paso.Stop();
         //sfx.salto.Stop();
-        Debug.Log("Muerto");
     }
 
     /**
@@ -435,6 +434,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("FinishAnimation"))
+        {
+            LevelManager.sharedInstance.FinishGame();
+        }
         if (!collision.CompareTag("KillZone"))
         {
             int changeTime = int.Parse(collision.tag);
