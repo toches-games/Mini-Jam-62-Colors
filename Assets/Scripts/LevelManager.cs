@@ -4,6 +4,7 @@ using TreeEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 //Estados del nivel
 public enum LevelState
@@ -61,6 +62,8 @@ public class LevelManager : MonoBehaviour
     float velocity;
 
     public PlayerController player;
+    public Slider slider;
+    int sliderValue;
 
     private void Awake()
     {
@@ -266,5 +269,34 @@ public class LevelManager : MonoBehaviour
     {
         player.ResumeGame();
         StartCoroutine("Start");
+    }
+
+    public IEnumerator UpdateBipolarityBar(float target)
+    {
+        for (float i = slider.value; i < target; i+=0.1f)
+        {
+            slider.value = i;
+            yield return new WaitForSeconds(0.025f);
+        }
+    }
+    public float CalculateVariability(int changeTime)
+    {
+        float target;
+        switch (changeTime)
+        {
+            case 1:
+                target = 10;
+                break;
+            case 2:
+                target = 8;
+                break;
+            case 5:
+                target = 1;
+                break;
+            default:
+                target = 1;
+                break;
+        }
+        return target;
     }
 }
