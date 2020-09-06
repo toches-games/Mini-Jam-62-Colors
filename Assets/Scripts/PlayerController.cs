@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     
     Rigidbody2D playerRb;
-    Animator animator;
+    public Animator animator;
 
     bool isWalking;
 
@@ -35,6 +35,10 @@ public class PlayerController : MonoBehaviour
     Vector2 velocity;
 
     public Transform currentCheckPoint;
+
+    //Lado al que mira el jugador
+    float currentSide = 0;
+
     /*
     //public AudioSource fallDown;
     const string IS_ALIVE = "isAlive";
@@ -73,7 +77,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
         //sfx = FindObjectOfType<SFXManager>();
@@ -117,6 +120,30 @@ public class PlayerController : MonoBehaviour
             jumpForce = 12.5f;
         }
 
+        AnimatePlayer();
+    }
+
+    void AnimatePlayer()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        if (h != 0f && h != currentSide)
+        {
+            currentSide = h;
+            transform.localScale = new Vector3(currentSide, 1f, 1f);
+        }
+
+        if (h != 0)
+        {
+            animator.SetBool("Run", true);
+        }
+
+        else
+        {
+            animator.SetBool("Run", false);
+        }
+
+        animator.SetBool("Happy", LevelManager.sharedInstance.currentState == LevelState.Happy);
+        animator.SetBool("Sad", LevelManager.sharedInstance.currentState == LevelState.Sad);
     }
     void FixedUpdate()
     {
