@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     public List<Image>lives;
     bool pause = false;
 
-
+    public GameObject gameOverPanel;
 
     //Variables para el conseguir el swipe up y saltar
     //Vector2 startTouchPosition, endTouchPosition;
@@ -383,7 +383,8 @@ public class PlayerController : MonoBehaviour
         //GameManager.sharedInstance.GameOver();
         //sfx.paso.Stop();
         //sfx.salto.Stop();
-        Debug.Log("Muerto");
+        pause = true;
+        gameOverPanel.SetActive(true);
     }
 
     /**
