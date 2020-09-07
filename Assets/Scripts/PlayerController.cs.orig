@@ -34,11 +34,15 @@ public class PlayerController : MonoBehaviour
     Vector2 velocity;
 
     public Transform currentCheckPoint;
+<<<<<<< HEAD
+    
+=======
 
     //Lado al que mira el jugador
     float currentSide = 0;
 
-    
+    /*
+>>>>>>> 0d6a2dc12c799034c89aa82b8430938d27142332
     //public AudioSource fallDown;
     const string IS_ALIVE = "isAlive";
     const string IS_ON_THE_GROUND = "isOnTheGround";
@@ -77,7 +81,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         boxCollider = GetComponent<PolygonCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
         sfx = FindObjectOfType<SFXManager>();
@@ -384,8 +387,11 @@ public class PlayerController : MonoBehaviour
         //GameManager.sharedInstance.GameOver();
         //sfx.paso.Stop();
         //sfx.salto.Stop();
+<<<<<<< HEAD
+=======
         pause = true;
         gameOverPanel.SetActive(true);
+>>>>>>> 0d6a2dc12c799034c89aa82b8430938d27142332
     }
 
     /**
