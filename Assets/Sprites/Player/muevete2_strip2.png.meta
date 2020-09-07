@@ -1,0 +1,227 @@
+fileFormatVersion: 2
+guid: 8f3e909ed0aed2a4bb5cdf3a2a8a265f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1477489414094798908
+    second: muevete2_strip2_0
+  - first:
+      213: 3098361773374610722
+    second: muevete2_strip2_0
+  - first:
+      213: 4997930603567535823
+    second: muevete2_strip2_1
+  - first:
+      213: -8476736489583550176
+    second: muevete2_strip2_2
+  - first:
+      213: 8918267676850064357
+    second: muevete2_strip2_3
+  - first:
+      213: -1717782865811084497
+    second: muevete2_strip2_4
+  - first:
+      213: 8712267361096819869
+    second: muevete2_strip2_5
+  - first:
+      213: -125092204161565396
+    second: muevete2_strip2_6
+  - first:
+      213: -7453812737436964667
+    second: muevete2_strip2_7
+  - first:
+      213: -8013249644462022036
+    second: muevete2_strip2_8
+  - first:
+      213: -6460348990928231138
+    second: muevete2_strip2_9
+  - first:
+      213: -4842027468226016016
+    second: muevete2_strip2_10
+  - first:
+      213: 9119793052775786737
+    second: muevete2_strip2_11
+  - first:
+      213: 4205918160158410566
+    second: muevete2_strip2_12
+  - first:
+      213: -5457477947110649547
+    second: muevete2_strip2_13
+  - first:
+      213: -3694057782278241523
+    second: muevete2_strip2_14
+  - first:
+      213: -8029025798573827780
+    second: muevete2_strip2_15
+  - first:
+      213: -1027150319433164807
+    second: muevete2_strip2_16
+  - first:
+      213: 4832752370429513261
+    second: muevete2_strip2_17
+  - first:
+      213: -5247520201615043003
+    second: muevete2_strip2_18
+  - first:
+      213: 5443840359971185007
+    second: muevete2_strip2_19
+  - first:
+      213: -154130877888011520
+    second: muevete2_strip2_20
+  - first:
+      213: 1936788184925542282
+    second: muevete2_strip2_21
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: muevete2_strip2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 216
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22d94a7fd979ffa20800000000000000
+      internalID: 3098361773374610722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: muevete2_strip2_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 0
+        width: 216
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc652bd57673c5540800000000000000
+      internalID: 4997930603567535823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

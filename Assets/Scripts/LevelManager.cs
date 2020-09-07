@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using TMPro;
 
+//Estados del nivel
 public enum LevelState
 {
     Happy,
@@ -17,6 +19,12 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager sharedInstance;
 
+    [Header("Dissolve Effect")]
+    //Tiempo en el que iniciará el efecto
+    public float dissolveInitTime = 0.5f;
+    //Tiempo de duración del efecto
+    public float dissolveSmoothTime = 0.25f;
+
     [Header("Level Settings")]
     //Tiempo que se demorará en cambiar de estado el nivel
     [Range(1, 10)]
@@ -25,12 +33,20 @@ public class LevelManager : MonoBehaviour
     [Header("Tile Gameobjects")]
     //Guarda los tiles del nivel en estado feliz
     public GameObject happyTiles;
-    TilemapRenderer happyTilesRenderer;
+    //Con este cambiamos el alpha a transparente de los tiles desactivados
+    Tilemap happyTileMap;
+    //Con este se hace la animación del material con el shader Dissolve
+    TilemapRenderer happyTileMapRenderer;
+    //Guarda los collider de los tiles happy
     TilemapCollider2D happyTilesCollider;
 
     //Guarda los tiles del nivel en estado triste
     public GameObject sadTiles;
-    TilemapRenderer sadTilesRenderer;
+    //Con este cambiamos el alpha a transparente de los tiles desactivados
+    Tilemap sadTileMap;
+    //Con este se hace la animación del material con el shader Dissolve
+    TilemapRenderer sadTileMapRenderer;
+    //Guarda los collider de los tiles sad
     TilemapCollider2D sadTilesCollider;
 
     //Estado actual del nivel
@@ -38,7 +54,14 @@ public class LevelManager : MonoBehaviour
     public LevelState currentState = LevelState.Happy;
 
     //Solo es para mostrar el tiempo en pantalla
-    public int tempTime;
+    [HideInInspector]
+    public float tempTime;
+
+    //Guarda el valor que se usará para hacer el effecto de dissolve
+    float smoothValue;
+
+    //Velocidad del metodo SmoothDamp
+    float velocity;
 
     public PlayerController player;
     public Slider slider;
@@ -54,50 +77,88 @@ public class LevelManager : MonoBehaviour
 
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
 
-        happyTilesRenderer = happyTiles.GetComponent<TilemapRenderer>();
+        happyTileMap = happyTiles.GetComponent<Tilemap>();
+        happyTileMapRenderer = happyTiles.GetComponent<TilemapRenderer>();
         happyTilesCollider = happyTiles.GetComponent<TilemapCollider2D>();
 
-        sadTilesRenderer = sadTiles.GetComponent<TilemapRenderer>();
+        sadTileMap = sadTiles.GetComponent<Tilemap>();
+        sadTileMapRenderer = sadTiles.GetComponent<TilemapRenderer>();
         sadTilesCollider = sadTiles.GetComponent<TilemapCollider2D>();
     }
 
     // Start is called before the first frame update
-    IEnumerator Start()
+    void Start()
     {
         tempTime = nextStateTime;
 
         //Crea el nivel inicial con un estado aleatorio
         UpdateRandomTilesLevel();
+    }
 
-        while (true)
+    void Update()
+    {
+        if (player.GetPauseGame())
         {
-            //Cada tiempo se actualiza al siguiente estado
-            yield return new WaitForSeconds(1);
-            tempTime--;
+            return;
+        }
 
-            if(tempTime <= 0)
-            {
-                tempTime = nextStateTime;
-                UpdateNextStateTiles();
-            }
+        tempTime -= Time.deltaTime;
+
+        if(tempTime <= 0)
+        {
+            tempTime = nextStateTime;
+            smoothValue = 0;
+            UpdateNextStateTiles();
+        }
+
+        else if(tempTime <= dissolveInitTime)
+        {
+            smoothValue = Mathf.SmoothDamp(smoothValue, 1f, ref velocity, dissolveSmoothTime);
+            DissolveEffect();
+        }
+
+    }
+
+    void DissolveEffect()
+    {
+        if (currentState == LevelState.Happy)
+        {
+            happyTileMapRenderer.material.SetFloat("Fade", 1 - smoothValue + 0.15f);
+            happyTileMap.color = new Color(happyTileMap.color.r, happyTileMap.color.g, happyTileMap.color.b, 1 - smoothValue + 0.15f);
+
+            sadTileMapRenderer.material.SetFloat("Fade", smoothValue);
+            sadTileMap.color = new Color(sadTileMap.color.r, sadTileMap.color.g, sadTileMap.color.b, smoothValue);
+        }
+
+        else
+        {
+            sadTileMapRenderer.material.SetFloat("Fade", 1 - smoothValue + 0.15f);
+            sadTileMap.color = new Color(sadTileMap.color.r, sadTileMap.color.g, sadTileMap.color.b, 1 - smoothValue + 0.15f);
+
+            happyTileMapRenderer.material.SetFloat("Fade", smoothValue);
+            happyTileMap.color = new Color(happyTileMap.color.r, happyTileMap.color.g, happyTileMap.color.b, smoothValue);
         }
     }
 
-    void DisableTiles(TilemapRenderer tileRender, TilemapCollider2D tileCollider)
+    //Desactiva los tiles
+    void DisableTiles(Tilemap tileMap, TilemapCollider2D tileCollider, TilemapRenderer tileRenderer)
     {
-        Color tempActiveColor = tileRender.material.color;
-        tileRender.material.color = new Color(tempActiveColor.r, tempActiveColor.g, tempActiveColor.b, 0.15f);
+        tileMap.color = new Color(tileMap.color.r, tileMap.color.g, tileMap.color.b, 0.15f);
+
+        tileRenderer.material.SetFloat("Fade", 1);
         tileCollider.enabled = false;
     }
 
-    void ActiveTiles(TilemapRenderer tileRender, TilemapCollider2D tileCollider)
+    //Activa los tiles
+    void ActiveTiles(Tilemap tileMap, TilemapCollider2D tileCollider, TilemapRenderer tileRenderer)
     {
-        Color tempActiveColor = tileRender.material.color;
-        tileRender.material.color = new Color(tempActiveColor.r, tempActiveColor.g, tempActiveColor.b, 1);
+        tileMap.color = new Color(tileMap.color.r, tileMap.color.g, tileMap.color.b, 1f);
+
+        tileRenderer.material.SetFloat("Fade", 1);
         tileCollider.enabled = true;
     }
 
@@ -123,8 +184,8 @@ public class LevelManager : MonoBehaviour
     void UpdateRandomTilesLevel()
     {
         //Como solo se llama al inicio, activamos los dos objetos que guardan todos los tiles aqui
-        happyTiles.SetActive(true);
-        sadTiles.SetActive(true);
+        //happyTiles.SetActive(true);
+        //sadTiles.SetActive(true);
 
         //Asigna al estado actual un estado random, se usa al inicio para que sea aleatorio cada vez que inicia el juego
         //currentState = (LevelState)Random.Range(0, System.Enum.GetValues(typeof(LevelState)).Length);
@@ -138,21 +199,21 @@ public class LevelManager : MonoBehaviour
     {
         if (currentState == LevelState.Happy)
         {
-            ActiveTiles(happyTilesRenderer, happyTilesCollider);
-            DisableTiles(sadTilesRenderer, sadTilesCollider);
+            ActiveTiles(happyTileMap, happyTilesCollider, happyTileMapRenderer);
+            DisableTiles(sadTileMap, sadTilesCollider, sadTileMapRenderer);
         }
 
         else
         {
-            ActiveTiles(sadTilesRenderer, sadTilesCollider);
-            DisableTiles(happyTilesRenderer, happyTilesCollider);
+            ActiveTiles(sadTileMap, sadTilesCollider, sadTileMapRenderer);
+            DisableTiles(happyTileMap, happyTilesCollider, happyTileMapRenderer);
         }
     }
 
-    private void OnGUI()
+    /*private void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 100, 20), tempTime.ToString());
-    }
+    }*/
 
     public void ResetGame()
     {
@@ -208,13 +269,15 @@ public class LevelManager : MonoBehaviour
     public void PauseGame()
     {
         player.PauseGame();
-        StopCoroutine("Start");
+        //StopCoroutine("Start");
+        tempTime = nextStateTime;
     }
 
     public void ResumeGame()
     {
         player.ResumeGame();
-        StartCoroutine("Start");
+        tempTime = nextStateTime;
+        //StartCoroutine("Start");
     }
 
     public IEnumerator UpdateBipolarityBar(float target)
