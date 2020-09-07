@@ -77,7 +77,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         boxCollider = GetComponent<PolygonCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
         sfx = FindObjectOfType<SFXManager>();
