@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     float lastMovement = 1f;
 
-    BoxCollider2D boxCollider;
+    CapsuleCollider2D boxCollider;
 
     Vector2 velocity;
 
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<CapsuleCollider2D>();
         //sprite = GetComponent<SpriteRenderer>();
         //sfx = FindObjectOfType<SFXManager>();
     }
