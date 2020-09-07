@@ -208,10 +208,10 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void OnGUI()
+    /*private void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 100, 20), tempTime.ToString());
-    }
+    }*/
 
     public void ResetGame()
     {
