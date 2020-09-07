@@ -471,6 +471,12 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("FinishAnimation"))
         {
             LevelManager.sharedInstance.FinishGame();
+            GameObject.Find("VictoryMenu").SetActive(true);
+        }
+        if (collision.CompareTag("wait"))
+        {
+            this.currentCheckPoint = GameObject.Find("3) 5sec").transform;
+            ResetToCheckPoint();
         }
         if (!collision.CompareTag("KillZone"))
         {
