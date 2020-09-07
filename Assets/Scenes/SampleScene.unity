@@ -5030,7 +5030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dissolveInitTime: 0.8
-  dissolveSmoothTime: 0.25
+  dissolveSmoothTime: 0.5
   nextStateTime: 5
   happyTiles: {fileID: 246653372}
   sadTiles: {fileID: 1662874176}
