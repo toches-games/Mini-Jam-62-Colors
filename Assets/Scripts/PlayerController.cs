@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D playerRb;
     public Animator animator;
 
-    bool isWalking;
+    bool isWalking = false;
 
     public float jumpRaycastDistance = 0.6f;
     //public float positionSidesRaycast = 0.3f;
@@ -241,7 +241,7 @@ public class PlayerController : MonoBehaviour
         */
         isWalking = false;
         
-        if (Input.GetAxisRaw(HORIZONTAL) >= 0 || Input.GetAxisRaw(HORIZONTAL) <= 0)
+        if (Input.GetAxisRaw(HORIZONTAL) >= 0.5 || Input.GetAxisRaw(HORIZONTAL) <= -0.5)
         {
             isWalking = true;
             lastMovement = Input.GetAxisRaw(HORIZONTAL) * runningSpeed;
@@ -250,29 +250,31 @@ public class PlayerController : MonoBehaviour
         if (!isWalking)
         {
             playerRb.velocity = new Vector2(0, playerRb.velocity.y);
-            //sfx.paso.Stop();
+            sfx.paso.Stop();
         }
 
         //Si está en el aire
         if (!IsTouchingTheGround()){
             //Se le aplica una fuerza hacia abajo para que caiga
             //playerRb.AddForce(Vector2.up * -gravity);
+            sfx.paso.Stop();
+
         }
 
-        else{
+        else
+        {
             //Si está en el suelo se pone la velocidad en y a 0 para que
             //no se ralentice por el peso de la gravedad que traia al caer
             //playerRb.velocity = new Vector2(playerRb.velocity.x, 0f);
 
             if (isWalking)
             {
-                //if (!sfx.paso.isPlaying)
-                //{
-                //    sfx.paso.Play();
-                //}
+                if (!sfx.paso.isPlaying)
+                {
+                    sfx.paso.Play();
+                }
             }
         }
-
         /*
         animator.SetFloat(HORIZONTAL, Input.GetAxis(HORIZONTAL));
         animator.SetBool(WALKING_STATE, walking);
@@ -293,7 +295,7 @@ public class PlayerController : MonoBehaviour
             
             playerRb.AddRelativeForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             //GetComponent<AudioSource>().Play();
-            //sfx.salto.Play();
+            sfx.salto.Play();
         }
     }
 
@@ -378,11 +380,11 @@ public class PlayerController : MonoBehaviour
         //{
         //    PlayerPrefs.SetFloat("maxScore", travelledDistance);
         //}
-        //sfx.muerte.Play();
+        sfx.muerte.Play();
         //animator.SetBool(IS_ALIVE, false);
         //GameManager.sharedInstance.GameOver();
-        //sfx.paso.Stop();
-        //sfx.salto.Stop();
+        sfx.paso.Stop();
+        sfx.salto.Stop();
         pause = true;
         gameOverPanel.SetActive(true);
     }
@@ -421,9 +423,10 @@ public class PlayerController : MonoBehaviour
         else
         {
             Invoke("ResetToCheckPoint", 0.5f);
-            //sfx.herida.Play();
+            sfx.muerte.Play();
+
         }
-        
+
     }
 
     private void ResetToCheckPoint()
